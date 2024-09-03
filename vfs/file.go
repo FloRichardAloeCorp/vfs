@@ -30,5 +30,9 @@ func (vfs *VFS) ReadFileInfo(path string) (*Node, error) {
 		return nil, err
 	}
 
+	if node.Type != File {
+		return nil, ErrFileIsADirectory
+	}
+
 	return node, nil
 }
