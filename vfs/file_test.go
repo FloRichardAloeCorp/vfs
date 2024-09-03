@@ -119,3 +119,42 @@ func TestVfsReadFileInfo(t *testing.T) {
 		})
 	}
 }
+
+func TestVfsDeleteFile(t *testing.T) {
+	type testData struct {
+		name       string
+		shouldFail bool
+		path       string
+	}
+
+	var testCases = [...]testData{
+		{
+			name:       "Success case",
+			shouldFail: false,
+			path:       "/dir1/file1.txt",
+		},
+		{
+			name:       "Fail case: invalid path",
+			shouldFail: true,
+			path:       "/invalid",
+		},
+		{
+			name:       "Fail case: file is a directory",
+			shouldFail: true,
+			path:       "/dir1",
+		},
+	}
+
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+			instance := newTestVFS()
+			err := instance.DeleteFile(testCase.path)
+			if testCase.shouldFail {
+				assert.Error(t, err)
+			} else {
+				assert.NoError(t, err)
+
+			}
+		})
+	}
+}

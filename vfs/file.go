@@ -36,3 +36,16 @@ func (vfs *VFS) ReadFileInfo(path string) (*Node, error) {
 
 	return node, nil
 }
+
+func (vfs *VFS) DeleteFile(path string) error {
+	node, err := vfs.findNode(path)
+	if err != nil {
+		return err
+	}
+
+	if node.Type != File {
+		return ErrFileIsADirectory
+	}
+
+	return vfs.deleteNode(path)
+}

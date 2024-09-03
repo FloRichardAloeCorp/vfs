@@ -1,6 +1,7 @@
 package vfs
 
 import (
+	"path/filepath"
 	"strings"
 
 	"github.com/google/uuid"
@@ -68,4 +69,35 @@ func (vfs *VFS) findNode(path string) (*Node, error) {
 	}
 
 	return node, nil
+}
+
+func (vfs *VFS) deleteNode(path string) error {
+	if path == "/" {
+		return ErrDelRoot
+	}
+
+	pathParts := strings.Split(path, "/")
+	if len(path) == 0 {
+		return ErrTooShorPath
+	}
+
+	node, err := vfs.Root.FindChild(pathParts[1])
+	if err != nil {
+		return err
+	}
+
+	// Find parent of the node
+	for _, part := range pathParts[2 : len(pathParts)-1] {
+		node, err = node.FindChild(part)
+		if err != nil {
+			return err
+		}
+	}
+
+	if _, ok := node.Children[filepath.Base(path)]; !ok {
+		return ErrUnknowFileOrDirectory
+	}
+
+	delete(node.Children, filepath.Base(path))
+	return nil
 }

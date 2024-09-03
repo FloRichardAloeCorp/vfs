@@ -11,6 +11,7 @@ var (
 	ErrUnknowFileOrDirectory = errors.New("unknow file or directory")
 	ErrFileAlreadyExists     = errors.New("file already exists")
 	ErrTooShorPath           = errors.New("path is too short")
+	ErrDelRoot               = errors.New("can't delete root directory")
 )
 
 type InvalidFileError struct {

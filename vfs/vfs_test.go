@@ -34,6 +34,26 @@ func newTestVFS() *VFS {
 						},
 					},
 				},
+				"dir2": {
+					ID:   uuid.New(),
+					Name: "dir2",
+					Type: Directory,
+					Children: map[string]*Node{
+						"dir3": {
+							ID:   uuid.New(),
+							Name: "dir3",
+							Type: Directory,
+							Children: map[string]*Node{
+								"dir4": {
+									ID:       uuid.New(),
+									Name:     "dir4",
+									Type:     Directory,
+									Children: map[string]*Node{},
+								},
+							},
+						},
+					},
+				},
 				"file3.txt": {
 					ID:      uuid.New(),
 					Name:    "file3.txt",
@@ -170,6 +190,67 @@ func TestVfsAddNode(t *testing.T) {
 				expected, err := instance.findNode(filepath.Join(testCase.parentPath, testCase.child.Name))
 				assert.NoError(t, err)
 				assert.Equal(t, testCase.child, expected)
+			}
+		})
+	}
+}
+
+func TestVfsDeleteNode(t *testing.T) {
+	type testData struct {
+		name       string
+		shouldFail bool
+		path       string
+	}
+
+	var testCases = [...]testData{
+		{
+			name:       "Succes case",
+			shouldFail: false,
+			path:       "/dir1/file1.txt",
+		},
+		{
+			name:       "Succes case: longer path",
+			shouldFail: false,
+			path:       "/dir2/dir3/dir4",
+		},
+		{
+			name:       "Fail case: deleting root",
+			shouldFail: true,
+			path:       "/",
+		},
+		{
+			name:       "Fail case: no path provided",
+			shouldFail: true,
+			path:       "",
+		},
+		{
+			name:       "Fail case: invalid path at root",
+			shouldFail: true,
+			path:       filepath.Join("/", "invalid"),
+		},
+		{
+			name:       "Fail case: invalid path",
+			shouldFail: true,
+			path:       "/dir1/invalid",
+		},
+		{
+			name:       "Succes case: invalid longer path",
+			shouldFail: true,
+			path:       "/dir2/invalid/invalid",
+		},
+	}
+
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+			instance := newTestVFS()
+			err := instance.deleteNode(testCase.path)
+			if testCase.shouldFail {
+				assert.Error(t, err)
+			} else {
+				assert.NoError(t, err)
+				node, err := instance.findNode(testCase.path)
+				assert.Error(t, err)
+				assert.Nil(t, node)
 			}
 		})
 	}
