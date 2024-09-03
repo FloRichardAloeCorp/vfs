@@ -86,6 +86,11 @@ func (vfs *VFS) deleteNode(path string) error {
 		return err
 	}
 
+	if len(pathParts) <= 2 {
+		delete(vfs.Root.Children, filepath.Base(path))
+		return nil
+	}
+
 	// Find parent of the node
 	for _, part := range pathParts[2 : len(pathParts)-1] {
 		node, err = node.FindChild(part)

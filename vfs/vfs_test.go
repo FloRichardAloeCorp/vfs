@@ -209,6 +209,11 @@ func TestVfsDeleteNode(t *testing.T) {
 			path:       "/dir1/file1.txt",
 		},
 		{
+			name:       "Succes case: first level element",
+			shouldFail: false,
+			path:       "/dir1",
+		},
+		{
 			name:       "Succes case: longer path",
 			shouldFail: false,
 			path:       "/dir2/dir3/dir4",

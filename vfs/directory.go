@@ -27,3 +27,16 @@ func (vfs *VFS) ListFiles(path string) ([]Node, error) {
 
 	return nodes, nil
 }
+
+func (vfs *VFS) DeleteDirectory(path string) error {
+	node, err := vfs.findNode(path)
+	if err != nil {
+		return err
+	}
+
+	if node.Type != Directory {
+		return ErrFileIsNotADirectory
+	}
+
+	return vfs.deleteNode(path)
+}

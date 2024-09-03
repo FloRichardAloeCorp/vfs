@@ -153,7 +153,6 @@ func TestVfsDeleteFile(t *testing.T) {
 				assert.Error(t, err)
 			} else {
 				assert.NoError(t, err)
-
 			}
 		})
 	}
