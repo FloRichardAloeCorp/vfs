@@ -1,6 +1,8 @@
 package vfs
 
-import "path/filepath"
+import (
+	"path/filepath"
+)
 
 func (vfs *VFS) CreateFile(path string, content []byte) error {
 	fileName := filepath.Base(path)
@@ -20,4 +22,13 @@ func (vfs *VFS) ReadFile(path string) ([]byte, error) {
 	}
 
 	return node.Content, nil
+}
+
+func (vfs *VFS) ReadFileInfo(path string) (*Node, error) {
+	node, err := vfs.findNode(path)
+	if err != nil {
+		return nil, err
+	}
+
+	return node, nil
 }
