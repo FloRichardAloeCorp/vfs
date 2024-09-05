@@ -43,10 +43,12 @@ func (r *directoryRepository) ListFiles(path string) ([]file.FileInfo, error) {
 	files := make([]file.FileInfo, 0, len(nodes))
 	for _, node := range nodes {
 		files = append(files, file.FileInfo{
-			ID:   node.ID,
-			Name: node.Name,
-			Path: filepath.Join(path, node.Name),
-			Type: node.Type.String(),
+			ID:         node.ID,
+			Name:       node.Name,
+			Path:       filepath.Join(path, node.Name),
+			Type:       node.Type.String(),
+			CreatedAt:  node.CreatedAt,
+			LastUpdate: node.LastUpdate,
 		})
 	}
 

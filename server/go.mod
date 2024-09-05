@@ -5,7 +5,7 @@ go 1.22.4
 require (
 	github.com/Aloe-Corporation/cors v1.0.2
 	github.com/Aloe-Corporation/logs v0.0.1
-	github.com/FloRichardAloeCorp/vfs/vfs v0.0.0-20240903115854-db1f29ca8894
+	github.com/FloRichardAloeCorp/vfs/vfs v0.0.0-20240905122649-064cd9c756da
 	github.com/gin-contrib/zap v1.1.4
 	github.com/gin-gonic/gin v1.10.0
 	github.com/go-playground/validator/v10 v10.22.0
@@ -25,7 +25,7 @@ require (
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect
 	github.com/goccy/go-json v0.10.3 // indirect
-	github.com/google/uuid v1.6.0 // indirect
+	github.com/google/uuid v1.6.0
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/klauspost/cpuid/v2 v2.2.8 // indirect
