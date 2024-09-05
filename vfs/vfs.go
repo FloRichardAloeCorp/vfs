@@ -1,19 +1,21 @@
 package vfs
 
 import (
+	"fmt"
 	"path/filepath"
 	"strings"
+	"time"
 
 	"github.com/google/uuid"
 )
 
 type VFS struct {
-	Root *Node
+	*Node
 }
 
 func NewVFS() *VFS {
 	return &VFS{
-		Root: &Node{
+		&Node{
 			ID:       uuid.New(),
 			Name:     "/",
 			Type:     Directory,
@@ -38,12 +40,23 @@ func (vfs *VFS) addNode(parentPath string, child *Node) error {
 
 	parent.Children[child.Name] = child
 
+	updateLastUpdateDate := func(node *Node) {
+		node.LastUpdate = time.Now().UTC()
+	}
+
+	if err := vfs.updateAll(parentPath, updateLastUpdateDate); err != nil {
+		return fmt.Errorf("can't update last update date of parent nodes: %w", err)
+	}
+
 	return nil
 }
 
 func (vfs *VFS) findNode(path string) (*Node, error) {
+	var node = vfs.Node
+	var err error
+
 	if path == "/" {
-		return vfs.Root, nil
+		return node, nil
 	}
 
 	pathParts := strings.Split(path, "/")
@@ -51,17 +64,7 @@ func (vfs *VFS) findNode(path string) (*Node, error) {
 		return nil, ErrTooShorPath
 	}
 
-	// exluding root node
-	node, err := vfs.Root.FindChild(pathParts[1])
-	if err != nil {
-		return nil, err
-	}
-
-	if node.Type == File {
-		return node, nil
-	}
-
-	for _, part := range pathParts[2:] {
+	for _, part := range pathParts[1:] {
 		node, err = node.FindChild(part)
 		if err != nil {
 			return nil, err
@@ -76,33 +79,48 @@ func (vfs *VFS) deleteNode(path string) error {
 		return ErrDelRoot
 	}
 
+	parentPath := filepath.Dir(path)
+	parent, err := vfs.findNode(parentPath)
+	if err != nil {
+		return err
+	}
+
+	if _, ok := parent.Children[filepath.Base(path)]; !ok {
+		return ErrUnknowFileOrDirectory
+	}
+
+	delete(parent.Children, filepath.Base(path))
+	return nil
+}
+
+func (vfs *VFS) updateAll(path string, updateFn func(node *Node)) error {
+	if path == "/" {
+		updateFn(vfs.Node)
+		return nil
+	}
+
+	// Check if path is valid before applying updates
+	_, err := vfs.findNode(path)
+	if err != nil {
+		return err
+	}
+
+	// Apply updates on all nodes of the path
 	pathParts := strings.Split(path, "/")
 	if len(path) == 0 {
 		return ErrTooShorPath
 	}
 
-	node, err := vfs.Root.FindChild(pathParts[1])
-	if err != nil {
-		return err
-	}
+	node := vfs.Node
+	updateFn(node)
 
-	if len(pathParts) <= 2 {
-		delete(vfs.Root.Children, filepath.Base(path))
-		return nil
-	}
-
-	// Find parent of the node
-	for _, part := range pathParts[2 : len(pathParts)-1] {
+	for _, part := range pathParts[1:] {
 		node, err = node.FindChild(part)
 		if err != nil {
 			return err
 		}
+		updateFn(node)
 	}
 
-	if _, ok := node.Children[filepath.Base(path)]; !ok {
-		return ErrUnknowFileOrDirectory
-	}
-
-	delete(node.Children, filepath.Base(path))
 	return nil
 }

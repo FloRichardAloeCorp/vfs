@@ -3,52 +3,61 @@ package vfs
 import (
 	"path/filepath"
 	"testing"
+	"time"
 
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 )
 
 func newTestVFS() *VFS {
+	createdAt := time.Date(0, 0, 0, 0, 0, 0, 0, time.Local)
 	return &VFS{
-		Root: &Node{
-			ID:   uuid.New(),
-			Name: "/",
-			Type: Directory,
+		Node: &Node{
+			ID:        uuid.New(),
+			Name:      "/",
+			Type:      Directory,
+			CreatedAt: createdAt,
 			Children: map[string]*Node{
 				"dir1": {
-					ID:   uuid.New(),
-					Name: "dir1",
-					Type: Directory,
+					ID:        uuid.New(),
+					Name:      "dir1",
+					Type:      Directory,
+					CreatedAt: createdAt,
 					Children: map[string]*Node{
 						"file1.txt": {
-							ID:      uuid.New(),
-							Name:    "file1.txt",
-							Type:    File,
-							Content: []byte("hello word 1"),
+							ID:        uuid.New(),
+							Name:      "file1.txt",
+							Type:      File,
+							CreatedAt: createdAt,
+							Content:   []byte("hello word 1"),
 						},
 						"file2.txt": {
-							ID:      uuid.New(),
-							Name:    "file2.txt",
-							Type:    File,
-							Content: []byte("hello word 2"),
+							ID:        uuid.New(),
+							Name:      "file2.txt",
+							Type:      File,
+							CreatedAt: createdAt,
+							Content:   []byte("hello word 2"),
 						},
 					},
 				},
 				"dir2": {
-					ID:   uuid.New(),
-					Name: "dir2",
-					Type: Directory,
+					ID:        uuid.New(),
+					Name:      "dir2",
+					Type:      Directory,
+					CreatedAt: createdAt,
 					Children: map[string]*Node{
 						"dir3": {
-							ID:   uuid.New(),
-							Name: "dir3",
-							Type: Directory,
+							ID:        uuid.New(),
+							Name:      "dir3",
+							Type:      Directory,
+							CreatedAt: createdAt,
 							Children: map[string]*Node{
 								"dir4": {
-									ID:       uuid.New(),
-									Name:     "dir4",
-									Type:     Directory,
-									Children: map[string]*Node{},
+									ID:        uuid.New(),
+									Name:      "dir4",
+									Type:      Directory,
+									CreatedAt: createdAt,
+									Children:  map[string]*Node{},
 								},
 							},
 						},
@@ -80,19 +89,19 @@ func TestVfsFindNode(t *testing.T) {
 			name:         "Success case",
 			shouldFail:   false,
 			path:         "/dir1/file2.txt",
-			expectedNode: instance.Root.Children["dir1"].Children["file2.txt"],
+			expectedNode: instance.Node.Children["dir1"].Children["file2.txt"],
 		},
 		{
 			name:         "Success case: root",
 			shouldFail:   false,
 			path:         filepath.Join("/"),
-			expectedNode: instance.Root,
+			expectedNode: instance.Node,
 		},
 		{
 			name:         "Success case: File directly under root",
 			shouldFail:   false,
 			path:         "/file3.txt",
-			expectedNode: instance.Root.Children["file3.txt"],
+			expectedNode: instance.Node.Children["file3.txt"],
 		},
 		{
 			name:       "Fail case: no path provided",
@@ -190,6 +199,7 @@ func TestVfsAddNode(t *testing.T) {
 				expected, err := instance.findNode(filepath.Join(testCase.parentPath, testCase.child.Name))
 				assert.NoError(t, err)
 				assert.Equal(t, testCase.child, expected)
+				assert.NotEqual(t, instance.Node.LastUpdate, newTestVFS().Node.LastUpdate)
 			}
 		})
 	}
@@ -257,6 +267,57 @@ func TestVfsDeleteNode(t *testing.T) {
 				assert.Error(t, err)
 				assert.Nil(t, node)
 			}
+		})
+	}
+}
+
+func TestVfsUpdateAllSuccessCases(t *testing.T) {
+	updateFn := func(node *Node) {
+		node.CreatedAt = time.Date(0, 0, 0, 0, 0, 0, 0, time.Local)
+	}
+
+	instance := newTestVFS()
+	err := instance.updateAll("/dir1/file1.txt", updateFn)
+	assert.NoError(t, err)
+	assert.Equal(t, time.Date(0, 0, 0, 0, 0, 0, 0, time.Local), instance.Node.CreatedAt)
+	assert.Equal(t, time.Date(0, 0, 0, 0, 0, 0, 0, time.Local), instance.Node.Children["dir1"].CreatedAt)
+	assert.Equal(t, time.Date(0, 0, 0, 0, 0, 0, 0, time.Local), instance.Node.Children["dir1"].Children["file1.txt"].CreatedAt)
+
+	instance = newTestVFS()
+	err = instance.updateAll("/", updateFn)
+	assert.NoError(t, err)
+	assert.Equal(t, time.Date(0, 0, 0, 0, 0, 0, 0, time.Local), instance.Node.CreatedAt)
+}
+
+func TestVfsUpdateAllFailCases(t *testing.T) {
+	type testData struct {
+		name     string
+		path     string
+		updateFn func(node *Node)
+	}
+
+	var testCases = [...]testData{
+		{
+			name: "Fail case: invalid path",
+			path: "/dir1/invalid",
+			updateFn: func(node *Node) {
+				node.CreatedAt = time.Date(0, 0, 0, 0, 0, 0, 0, time.Local)
+			},
+		},
+		{
+			name: "Fail case: no path",
+			path: "",
+			updateFn: func(node *Node) {
+				node.CreatedAt = time.Date(0, 0, 0, 0, 0, 0, 0, time.Local)
+			},
+		},
+	}
+
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+			instance := newTestVFS()
+			err := instance.updateAll(testCase.path, testCase.updateFn)
+			assert.Error(t, err)
 		})
 	}
 }

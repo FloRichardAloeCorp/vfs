@@ -111,7 +111,7 @@ func TestNodeFindChild(t *testing.T) {
 		expectedNode *Node
 	}
 
-	instance := newTestVFS().Root
+	instance := newTestVFS().Node
 
 	var testCases = [...]testData{
 		{

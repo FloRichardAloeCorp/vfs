@@ -56,7 +56,7 @@ func TestVfsReadFile(t *testing.T) {
 			name:            "Success case",
 			shouldFail:      false,
 			path:            "/dir1/file2.txt",
-			expectedContent: instance.Root.Children["dir1"].Children["file2.txt"].Content,
+			expectedContent: instance.Node.Children["dir1"].Children["file2.txt"].Content,
 		},
 		{
 			name:       "Fail case: invalid path",
@@ -98,7 +98,7 @@ func TestVfsReadFileInfo(t *testing.T) {
 			name:         "Success case",
 			shouldFail:   false,
 			path:         "/dir1/file2.txt",
-			expectedNode: instance.Root.Children["dir1"].Children["file2.txt"],
+			expectedNode: instance.Node.Children["dir1"].Children["file2.txt"],
 		},
 		{
 			name:       "Fail case: invalid path",

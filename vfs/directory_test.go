@@ -56,8 +56,8 @@ func TestVfsListFiles(t *testing.T) {
 			shouldFail: false,
 			path:       "/dir1",
 			expectedNodes: []Node{
-				*instance.Root.Children["dir1"].Children["file1.txt"],
-				*instance.Root.Children["dir1"].Children["file2.txt"],
+				*instance.Node.Children["dir1"].Children["file1.txt"],
+				*instance.Node.Children["dir1"].Children["file2.txt"],
 			},
 		},
 		{
