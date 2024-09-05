@@ -2,50 +2,52 @@ package vfs
 
 import (
 	"path/filepath"
+
+	"github.com/FloRichardAloeCorp/vfs/vfs/pkg/node"
 )
 
 func (vfs *VFS) CreateFile(path string, content []byte) error {
 	fileName := filepath.Base(path)
-	fileNode := NewFileNode(fileName, content)
+	fileNode := node.NewFile(fileName, content)
 
-	return vfs.addNode(filepath.Dir(path), fileNode)
+	return vfs.engine.AddNode(filepath.Dir(path), fileNode)
 }
 
 func (vfs *VFS) ReadFile(path string) ([]byte, error) {
-	node, err := vfs.findNode(path)
+	file, err := vfs.engine.FindNode(path)
 	if err != nil {
 		return nil, err
 	}
 
-	if node.Type != File {
+	if file.Type != node.File {
 		return nil, ErrFileIsADirectory
 	}
 
-	return node.Content, nil
+	return file.Content, nil
 }
 
-func (vfs *VFS) ReadFileInfo(path string) (*Node, error) {
-	node, err := vfs.findNode(path)
+func (vfs *VFS) ReadFileInfo(path string) (*node.Node, error) {
+	file, err := vfs.engine.FindNode(path)
 	if err != nil {
 		return nil, err
 	}
 
-	if node.Type != File {
+	if file.Type != node.File {
 		return nil, ErrFileIsADirectory
 	}
 
-	return node, nil
+	return file, nil
 }
 
 func (vfs *VFS) DeleteFile(path string) error {
-	node, err := vfs.findNode(path)
+	file, err := vfs.engine.FindNode(path)
 	if err != nil {
 		return err
 	}
 
-	if node.Type != File {
+	if file.Type != node.File {
 		return ErrFileIsADirectory
 	}
 
-	return vfs.deleteNode(path)
+	return vfs.engine.DeleteNode(path)
 }

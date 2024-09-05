@@ -4,6 +4,7 @@ import (
 	"path/filepath"
 	"testing"
 
+	"github.com/FloRichardAloeCorp/vfs/vfs/pkg/node"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -45,7 +46,7 @@ func TestVfsListFiles(t *testing.T) {
 		name          string
 		shouldFail    bool
 		path          string
-		expectedNodes []Node
+		expectedNodes []node.Node
 	}
 
 	instance := newTestVFS()
@@ -55,9 +56,9 @@ func TestVfsListFiles(t *testing.T) {
 			name:       "Succes case",
 			shouldFail: false,
 			path:       "/dir1",
-			expectedNodes: []Node{
-				*instance.Node.Children["dir1"].Children["file1.txt"],
-				*instance.Node.Children["dir1"].Children["file2.txt"],
+			expectedNodes: []node.Node{
+				*instance.engine.Node.Children["dir1"].Children["file1.txt"],
+				*instance.engine.Node.Children["dir1"].Children["file2.txt"],
 			},
 		},
 		{

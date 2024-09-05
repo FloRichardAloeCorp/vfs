@@ -1,28 +1,10 @@
-package vfs
+package node
 
 import (
 	"time"
 
 	"github.com/google/uuid"
 )
-
-type NodeType int
-
-const (
-	File NodeType = iota
-	Directory
-)
-
-func (t *NodeType) String() string {
-	switch *t {
-	case File:
-		return "file"
-	case Directory:
-		return "directory"
-	default:
-		return "unknown"
-	}
-}
 
 type Node struct {
 	ID         uuid.UUID
@@ -34,7 +16,7 @@ type Node struct {
 	LastUpdate time.Time
 }
 
-func NewFileNode(name string, content []byte) *Node {
+func NewFile(name string, content []byte) *Node {
 	now := time.Now().UTC()
 	return &Node{
 		ID:         uuid.New(),
@@ -46,7 +28,7 @@ func NewFileNode(name string, content []byte) *Node {
 	}
 }
 
-func NewDirectoryNode(name string) *Node {
+func NewDirectory(name string) *Node {
 	now := time.Now().UTC()
 	return &Node{
 		ID:         uuid.New(),
@@ -64,7 +46,7 @@ func (n *Node) FindChild(name string) (*Node, error) {
 	}
 
 	if _, ok := n.Children[name]; !ok {
-		return nil, &InvalidFileError{BaseFileName: n.Name, ChildrenFileName: name}
+		return nil, ErrNoResult
 	}
 
 	return n.Children[name], nil

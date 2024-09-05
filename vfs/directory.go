@@ -1,25 +1,29 @@
 package vfs
 
-import "path/filepath"
+import (
+	"path/filepath"
+
+	"github.com/FloRichardAloeCorp/vfs/vfs/pkg/node"
+)
 
 func (vfs *VFS) CreateDirectory(path string) error {
 	directoryName := filepath.Base(path)
-	directoryNode := NewDirectoryNode(directoryName)
+	directoryNode := node.NewDirectory(directoryName)
 
-	return vfs.addNode(filepath.Dir(path), directoryNode)
+	return vfs.engine.AddNode(filepath.Dir(path), directoryNode)
 }
 
-func (vfs *VFS) ListFiles(path string) ([]Node, error) {
-	dir, err := vfs.findNode(path)
+func (vfs *VFS) ListFiles(path string) ([]node.Node, error) {
+	dir, err := vfs.engine.FindNode(path)
 	if err != nil {
 		return nil, err
 	}
 
-	if dir.Type != Directory {
+	if dir.Type != node.Directory {
 		return nil, ErrFileIsNotADirectory
 	}
 
-	nodes := make([]Node, 0, len(dir.Children))
+	nodes := make([]node.Node, 0, len(dir.Children))
 
 	for _, node := range dir.Children {
 		nodes = append(nodes, *node)
@@ -29,14 +33,14 @@ func (vfs *VFS) ListFiles(path string) ([]Node, error) {
 }
 
 func (vfs *VFS) DeleteDirectory(path string) error {
-	node, err := vfs.findNode(path)
+	directory, err := vfs.engine.FindNode(path)
 	if err != nil {
 		return err
 	}
 
-	if node.Type != Directory {
+	if directory.Type != node.Directory {
 		return ErrFileIsNotADirectory
 	}
 
-	return vfs.deleteNode(path)
+	return vfs.engine.DeleteNode(path)
 }

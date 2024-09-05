@@ -1,4 +1,4 @@
-package vfs
+package node
 
 import (
 	"errors"
@@ -6,5 +6,5 @@ import (
 
 var (
 	ErrFileIsNotADirectory = errors.New("target file is not a directory")
-	ErrFileIsADirectory    = errors.New("target file is not directory")
+	ErrNoResult            = errors.New("unknown file or directory")
 )

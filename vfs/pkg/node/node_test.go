@@ -1,10 +1,23 @@
-package vfs
+package node
 
 import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
+
+func newTestNode() *Node {
+	return &Node{
+		Name: "/",
+		Type: Directory,
+		Children: map[string]*Node{
+			"dir1": {
+				Name: "dir1",
+				Type: Directory,
+			},
+		},
+	}
+}
 
 func TestNodeTypeString(t *testing.T) {
 	type testData struct {
@@ -63,7 +76,7 @@ func TestNewFileNode(t *testing.T) {
 
 	for _, testCase := range testCases {
 		t.Run(testCase.name, func(t *testing.T) {
-			node := NewFileNode(testCase.fileName, testCase.content)
+			node := NewFile(testCase.fileName, testCase.content)
 			assert.Equal(t, testCase.expectedNode.Name, node.Name)
 			assert.Equal(t, testCase.expectedNode.Type, node.Type)
 			assert.Equal(t, testCase.expectedNode.Content, node.Content)
@@ -93,7 +106,7 @@ func TestNewDirectoryNode(t *testing.T) {
 
 	for _, testCase := range testCases {
 		t.Run(testCase.name, func(t *testing.T) {
-			node := NewDirectoryNode(testCase.dirName)
+			node := NewDirectory(testCase.dirName)
 			assert.Equal(t, testCase.expectedNode.Name, node.Name)
 			assert.Equal(t, testCase.expectedNode.Type, node.Type)
 			assert.Equal(t, testCase.expectedNode.Content, node.Content)
@@ -111,7 +124,7 @@ func TestNodeFindChild(t *testing.T) {
 		expectedNode *Node
 	}
 
-	instance := newTestVFS().Node
+	instance := newTestNode()
 
 	var testCases = [...]testData{
 		{

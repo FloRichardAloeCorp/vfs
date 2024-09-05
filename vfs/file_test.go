@@ -3,6 +3,7 @@ package vfs
 import (
 	"testing"
 
+	"github.com/FloRichardAloeCorp/vfs/vfs/pkg/node"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -56,7 +57,7 @@ func TestVfsReadFile(t *testing.T) {
 			name:            "Success case",
 			shouldFail:      false,
 			path:            "/dir1/file2.txt",
-			expectedContent: instance.Node.Children["dir1"].Children["file2.txt"].Content,
+			expectedContent: instance.engine.Node.Children["dir1"].Children["file2.txt"].Content,
 		},
 		{
 			name:       "Fail case: invalid path",
@@ -88,7 +89,7 @@ func TestVfsReadFileInfo(t *testing.T) {
 		name         string
 		shouldFail   bool
 		path         string
-		expectedNode *Node
+		expectedNode *node.Node
 	}
 
 	instance := newTestVFS()
@@ -98,12 +99,17 @@ func TestVfsReadFileInfo(t *testing.T) {
 			name:         "Success case",
 			shouldFail:   false,
 			path:         "/dir1/file2.txt",
-			expectedNode: instance.Node.Children["dir1"].Children["file2.txt"],
+			expectedNode: instance.engine.Node.Children["dir1"].Children["file2.txt"],
 		},
 		{
 			name:       "Fail case: invalid path",
 			shouldFail: true,
 			path:       "/invalid",
+		},
+		{
+			name:       "Fail case: file is a directory",
+			shouldFail: true,
+			path:       "/dir1",
 		},
 	}
 
