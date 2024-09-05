@@ -11,9 +11,9 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func newTestVFS() *VFS {
+func newTestVFS() *vfs {
 	createdAt := time.Date(0, 0, 0, 0, 0, 0, 0, time.Local)
-	return &VFS{
+	return &vfs{
 		engine: &engine.Engine{
 			Node: &node.Node{
 				ID:        uuid.New(),
@@ -81,9 +81,6 @@ func newTestVFS() *VFS {
 func TestNew(t *testing.T) {
 	vfs := New()
 	assert.NotNil(t, vfs)
-	assert.NotNil(t, vfs.engine)
-	assert.Equal(t, "/", vfs.engine.Name)
-	assert.Equal(t, node.Directory, vfs.engine.Type)
 }
 
 func TestVfsCreateFile(t *testing.T) {

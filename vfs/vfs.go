@@ -7,33 +7,46 @@ import (
 	"github.com/FloRichardAloeCorp/vfs/vfs/pkg/node"
 )
 
-type VFS struct {
+var _ VFS = (*vfs)(nil)
+
+type VFS interface {
+	CreateFile(path string, content []byte) error
+	CreateDirectory(path string) error
+
+	ReadFileContent(path string) ([]byte, error)
+	ReadFileInfo(path string) (*node.Node, error)
+	ListChilren(path string) ([]node.Node, error)
+
+	DeleteFile(path string) error
+}
+
+type vfs struct {
 	engine *engine.Engine
 }
 
-func New() *VFS {
-	return &VFS{
+func New() VFS {
+	return &vfs{
 		&engine.Engine{
 			Node: node.NewDirectory("/"),
 		},
 	}
 }
 
-func (vfs *VFS) CreateFile(path string, content []byte) error {
+func (vfs *vfs) CreateFile(path string, content []byte) error {
 	fileName := filepath.Base(path)
 	fileNode := node.NewFile(fileName, content)
 
 	return vfs.engine.AddNode(filepath.Dir(path), fileNode)
 }
 
-func (vfs *VFS) CreateDirectory(path string) error {
+func (vfs *vfs) CreateDirectory(path string) error {
 	directoryName := filepath.Base(path)
 	directoryNode := node.NewDirectory(directoryName)
 
 	return vfs.engine.AddNode(filepath.Dir(path), directoryNode)
 }
 
-func (vfs *VFS) ReadFileContent(path string) ([]byte, error) {
+func (vfs *vfs) ReadFileContent(path string) ([]byte, error) {
 	file, err := vfs.engine.FindNode(path)
 	if err != nil {
 		return nil, err
@@ -46,7 +59,7 @@ func (vfs *VFS) ReadFileContent(path string) ([]byte, error) {
 	return file.Content, nil
 }
 
-func (vfs *VFS) ReadFileInfo(path string) (*node.Node, error) {
+func (vfs *vfs) ReadFileInfo(path string) (*node.Node, error) {
 	file, err := vfs.engine.FindNode(path)
 	if err != nil {
 		return nil, err
@@ -55,7 +68,7 @@ func (vfs *VFS) ReadFileInfo(path string) (*node.Node, error) {
 	return file, nil
 }
 
-func (vfs *VFS) ListChilren(path string) ([]node.Node, error) {
+func (vfs *vfs) ListChilren(path string) ([]node.Node, error) {
 	dir, err := vfs.engine.FindNode(path)
 	if err != nil {
 		return nil, err
@@ -74,6 +87,6 @@ func (vfs *VFS) ListChilren(path string) ([]node.Node, error) {
 	return nodes, nil
 }
 
-func (vfs *VFS) DeleteFile(path string) error {
+func (vfs *vfs) DeleteFile(path string) error {
 	return vfs.engine.DeleteNode(path)
 }
