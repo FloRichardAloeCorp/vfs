@@ -1,7 +1,10 @@
 package file
 
+import "github.com/google/uuid"
+
 type FileInfo struct {
-	Name string
-	Path string
-	Type string
+	ID   uuid.UUID `json:"id"`
+	Name string    `json:"name"`
+	Path string    `json:"path"`
+	Type string    `json:"type"`
 }

@@ -49,6 +49,7 @@ func (r *fileRepository) ReadInfo(path string) (*FileInfo, error) {
 	}
 
 	info := &FileInfo{
+		ID:   node.ID,
 		Name: node.Name,
 		Path: path,
 		Type: node.Type.String(),
