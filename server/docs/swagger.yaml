@@ -1,0 +1,199 @@
+openapi: 3.0.3
+info:
+  title: VFS Server
+  version: 1.0.0
+  description: VFS Server that acts as an in-memory file system with basic operations.
+
+paths:
+  /file/{path}:
+    post:
+      summary: "Create a file"
+      description: "Create a file to the target destination indicated with the 'path' path parameters."
+      tags:
+        - File
+      parameters:
+        - $ref: "#/components/parameters/path"
+      requestBody:
+        description: The whole file sent as application/octet-stream
+        required: true
+        content:
+          application/octet-stream:
+            schema:
+              type: string
+      responses:
+        "201":
+          description: "File is created"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+    delete:
+      summary: "Delete a file"
+      description: "Delete the target file"
+      tags:
+        - File
+      parameters:
+        - $ref: "#/components/parameters/path"
+      responses:
+        "204":
+          description: "File is deleted"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+
+  /file/info/{path}:
+    get:
+      summary: "Get file information"
+      description: "Get file information"
+      tags:
+        - File
+      parameters:
+        - $ref: "#/components/parameters/path"
+      responses:
+        "200":
+          description: "File information"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/file_info"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+
+  /file/content/{path}:
+    get:
+      summary: "Get the content of the file"
+      description: "Get file content as application/octet-stream"
+      tags:
+        - File
+      parameters:
+        - $ref: "#/components/parameters/path"
+      responses:
+        "200":
+          description: "File content"
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+        "400":
+          $ref: "#/components/responses/BadRequest"
+  /file/name/{path}:
+    put:
+      summary: "Update the name of the file"
+      description: "Update the name of the file"
+      tags:
+        - File
+      parameters:
+        - $ref: "#/components/parameters/path"
+        - in: query
+          name: name
+          required: true
+          description: new name to set
+          schema:
+            type: string
+
+      responses:
+        "204":
+          description: "File updated"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+
+  /directory/*path:
+    post:
+      summary: "Create a directory"
+      description: "Create a new directory in target location"
+      tags:
+        - Directory
+      parameters:
+        - $ref: "#/components/parameters/path"
+      responses:
+        "201":
+          description: "Directory created"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+    get:
+      summary: "List directory's files"
+      description: "List files contained in the directory"
+      tags:
+        - Directory
+      parameters:
+        - $ref: "#/components/parameters/path"
+      responses:
+        "200":
+          description: "File information"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/file_info"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+
+    delete:
+      summary: "Delete a directory"
+      description: "Delete a directory and all its children"
+      tags:
+        - Directory
+      parameters:
+        - $ref: "#/components/parameters/path"
+      responses:
+        "201":
+          description: "Directory deleted"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+
+  /directory/name/*path:
+    put:
+      summary: "Update directory name"
+      description: "Rename the directory"
+      tags:
+        - Directory
+      parameters:
+        - $ref: "#/components/parameters/path"
+        - in: query
+          name: name
+          required: true
+          description: new name to set
+          schema:
+            type: string
+      responses:
+        "204":
+          description: "Directory update"
+
+        "400":
+          $ref: "#/components/responses/BadRequest"
+
+components:
+  schemas:
+    file_info:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        path:
+          type: string
+        type:
+          type: string
+        created_at:
+          type: string
+        last_update:
+          type: string
+
+  parameters:
+    path:
+      in: path
+      name: "path"
+      required: true
+      description: full path of the file/directory
+      schema:
+        type: string
+        example: /dir/subdir/file.txt
+
+  responses:
+    BadRequest:
+      description: Request is invalid
+      content:
+        application/json:
+          schema:
+            type: string
+            default:
+              content: "Bad request: <msg>"
