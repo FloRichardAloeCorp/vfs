@@ -28,7 +28,18 @@ The server is a Go REST API developed with `gin`. I built it following the princ
 
 ### Client
 
-The client is developed with Next.js. There’s nothing particularly unique about it—it simply allows browsing and manipulating your files.
+The client is developed with `Next.js`. There’s nothing particularly unique about it—it simply allows browsing and manipulating your files.
+
+### Features
+
+The product allows you do to the following things:
+
+* Upload files
+* Create directories
+* Delete files or directories
+* Nest files and directories
+* Renaming files and directories
+* Download files
 
 ## Launch the project
 
