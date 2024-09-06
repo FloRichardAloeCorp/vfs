@@ -5,7 +5,7 @@ go 1.22.4
 require (
 	github.com/Aloe-Corporation/cors v1.0.2
 	github.com/Aloe-Corporation/logs v0.0.1
-	github.com/FloRichardAloeCorp/vfs/vfs v0.0.0-20240906063852-5eb75a0ca84a
+	github.com/FloRichardAloeCorp/vfs/vfs v0.0.0-20240906071738-db7ec22d2bd9
 	github.com/gin-contrib/zap v1.1.4
 	github.com/gin-gonic/gin v1.10.0
 	github.com/go-playground/validator/v10 v10.22.0

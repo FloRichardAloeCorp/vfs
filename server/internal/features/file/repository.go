@@ -14,6 +14,7 @@ type iFileRepository interface {
 	CreateFile(path string, content []byte) error
 	ReadFile(path string) ([]byte, error)
 	ReadInfo(path string) (*FileInfo, error)
+	UpdateName(path string, newName string) error
 	DeleteFile(path string) error
 }
 
@@ -60,10 +61,10 @@ func (r *fileRepository) ReadInfo(path string) (*FileInfo, error) {
 	return info, nil
 }
 
-func (r *fileRepository) UpdateName(path string, newName string) {
-	err := r.vfs(path)
+func (r *fileRepository) UpdateName(path string, newName string) error {
+	err := r.vfs.RenameFile(path, newName)
 	if err != nil {
-		return fmt.Errorf("can't delete file: %w", err)
+		return fmt.Errorf("can't rename file: %w", err)
 	}
 	return nil
 }

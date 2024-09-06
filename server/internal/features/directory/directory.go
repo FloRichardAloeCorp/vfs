@@ -11,6 +11,7 @@ type DirectoryFeatures interface {
 	Create(path string) error
 	ListFiles(path string) ([]file.FileInfo, error)
 	Delete(path string) error
+	UpdateName(path string, newName string) error
 }
 
 func NewDirectoryFeatures(connectorType string, connector any) (DirectoryFeatures, error) {

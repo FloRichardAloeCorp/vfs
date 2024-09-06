@@ -22,6 +22,8 @@ func (h *DirectoryHandler) RegisterRoutes(router *gin.Engine) {
 	router.POST("/directory/*path", h.Post)
 	router.GET("/directory/*path", h.Get)
 	router.DELETE("/directory/*path", h.Delete)
+	router.PUT("/directory/name/*path", h.UpdateName)
+
 }
 
 func (h *DirectoryHandler) Post(c *gin.Context) {
@@ -78,4 +80,29 @@ func (h *DirectoryHandler) Delete(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusNoContent, "Directory deleted")
+}
+
+func (h *DirectoryHandler) UpdateName(c *gin.Context) {
+	path := c.Param("path")
+	if path == "" {
+		log.Error("DirectoryHandler.UpdateName fail", zap.String("error", "empty path"))
+		c.JSON(http.StatusBadRequest, "Bad Request: empty path")
+		return
+	}
+
+	newName, ok := c.GetQuery("name")
+	if !ok {
+		log.Error("DirectoryHandler.UpdateName fail", zap.String("error", "query param name is required"))
+		c.JSON(http.StatusBadRequest, "Bad Request: missing query param name")
+		return
+	}
+
+	err := h.directoryFeatures.UpdateName(path, newName)
+	if err != nil {
+		log.Error("DirectoryHandler.UpdateName :", zap.Error(err))
+		c.JSON(http.StatusBadRequest, "Bad Request")
+		return
+	}
+
+	c.JSON(http.StatusNoContent, "Directory updated")
 }

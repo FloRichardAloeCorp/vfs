@@ -15,6 +15,7 @@ var (
 type iDirectoryRepository interface {
 	Create(path string) error
 	ListFiles(path string) ([]file.FileInfo, error)
+	UpdateName(path string, newName string) error
 	Delete(path string) error
 }
 
@@ -53,6 +54,14 @@ func (r *directoryRepository) ListFiles(path string) ([]file.FileInfo, error) {
 	}
 
 	return files, nil
+}
+
+func (r *directoryRepository) UpdateName(path string, newName string) error {
+	err := r.vfs.RenameFile(path, newName)
+	if err != nil {
+		return fmt.Errorf("can't rename directory: %w", err)
+	}
+	return nil
 }
 
 func (r *directoryRepository) Delete(path string) error {

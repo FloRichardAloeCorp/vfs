@@ -35,6 +35,13 @@ func (c *directoryController) ListFiles(path string) ([]file.FileInfo, error) {
 	return files, nil
 }
 
+func (c *directoryController) UpdateName(path string, newName string) error {
+	if err := c.directoryRepository.UpdateName(path, newName); err != nil {
+		return fmt.Errorf("can't update file name: %w", err)
+	}
+	return nil
+}
+
 func (c *directoryController) Delete(path string) error {
 	if err := c.directoryRepository.Delete(path); err != nil {
 		return fmt.Errorf("can't delete directory: %w", err)

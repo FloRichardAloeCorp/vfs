@@ -8,6 +8,10 @@ github.com/FloRichardAloeCorp/vfs/vfs v0.0.0-20240905125306-0a457cafd733 h1:EM/+
 github.com/FloRichardAloeCorp/vfs/vfs v0.0.0-20240905125306-0a457cafd733/go.mod h1:xXdIT88jL20IHLyMcs2hkApYayVlVFb6j4qlWOXmLqc=
 github.com/FloRichardAloeCorp/vfs/vfs v0.0.0-20240906063852-5eb75a0ca84a h1:da1T24GYQpQ0zIuQ/As0/emc/XCfmIzaHYwV2Xt/NMQ=
 github.com/FloRichardAloeCorp/vfs/vfs v0.0.0-20240906063852-5eb75a0ca84a/go.mod h1:xXdIT88jL20IHLyMcs2hkApYayVlVFb6j4qlWOXmLqc=
+github.com/FloRichardAloeCorp/vfs/vfs v0.0.0-20240906064345-f623eeb03ff7 h1:UpOKxe+9WkQTGZhQKOmfmWLjAqOLmEtyrWM04ffN4xU=
+github.com/FloRichardAloeCorp/vfs/vfs v0.0.0-20240906064345-f623eeb03ff7/go.mod h1:xXdIT88jL20IHLyMcs2hkApYayVlVFb6j4qlWOXmLqc=
+github.com/FloRichardAloeCorp/vfs/vfs v0.0.0-20240906071738-db7ec22d2bd9 h1:itNB+06/WEbfepTfkaQ/XypwqNoN/sXBQGFTHNlMMkY=
+github.com/FloRichardAloeCorp/vfs/vfs v0.0.0-20240906071738-db7ec22d2bd9/go.mod h1:xXdIT88jL20IHLyMcs2hkApYayVlVFb6j4qlWOXmLqc=
 github.com/bytedance/sonic v1.12.1 h1:jWl5Qz1fy7X1ioY74WqO0KjAMtAGQs4sYnjiEBiyX24=
 github.com/bytedance/sonic v1.12.1/go.mod h1:B8Gt/XvtZ3Fqj+iSKMypzymZxw/FVwgIGKzMzT9r/rk=
 github.com/bytedance/sonic/loader v0.1.1/go.mod h1:ncP89zfokxS5LZrJxl5z0UJcsk4M4yY2JpfqGeCtNLU=

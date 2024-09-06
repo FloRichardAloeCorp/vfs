@@ -40,6 +40,9 @@ func (c *fileController) ReadInfo(path string) (*FileInfo, error) {
 }
 
 func (c *fileController) UpdateName(path string, newName string) error {
+	if err := c.fileRepository.UpdateName(path, newName); err != nil {
+		return fmt.Errorf("can't update file name: %w", err)
+	}
 	return nil
 }
 

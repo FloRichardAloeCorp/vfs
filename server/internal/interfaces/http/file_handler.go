@@ -117,4 +117,20 @@ func (h *FileHandler) UpdateName(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, "Bad Request: empty path")
 		return
 	}
+
+	newName, ok := c.GetQuery("name")
+	if !ok {
+		log.Error("FileHandler.UpdateName fail", zap.String("error", "query param name is required"))
+		c.JSON(http.StatusBadRequest, "Bad Request: missing query param name")
+		return
+	}
+
+	err := h.fileFeatures.UpdateName(path, newName)
+	if err != nil {
+		log.Error("FileHandler.UpdateName :", zap.Error(err))
+		c.JSON(http.StatusBadRequest, "Bad Request")
+		return
+	}
+
+	c.JSON(http.StatusNoContent, "File updated")
 }
