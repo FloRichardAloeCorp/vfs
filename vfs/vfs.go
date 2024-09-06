@@ -2,6 +2,7 @@ package vfs
 
 import (
 	"path/filepath"
+	"time"
 
 	"github.com/FloRichardAloeCorp/vfs/vfs/internal/engine"
 	"github.com/FloRichardAloeCorp/vfs/vfs/pkg/node"
@@ -99,6 +100,7 @@ func (vfs *vfs) RenameFile(path string, newName string) error {
 		return err
 	}
 	file.Name = newName
+	file.LastUpdate = time.Now().UTC()
 
 	if err := vfs.engine.AddNode(filepath.Dir(path), file); err != nil {
 		return err
