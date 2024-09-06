@@ -1,12 +1,15 @@
 import "@/styles/globals.css";
 import { Metadata, Viewport } from "next";
 import clsx from "clsx";
+import { ToastContainer } from "react-toastify";
 
 import { Providers } from "./providers";
 
 import { siteConfig } from "@/config/site";
 import { fontSans } from "@/config/fonts";
 import { PathProvider } from "@/context/path";
+
+import "react-toastify/dist/ReactToastify.css";
 
 export const metadata: Metadata = {
   title: {
@@ -42,11 +45,10 @@ export default function RootLayout({
       >
         <Providers themeProps={{ attribute: "class", defaultTheme: "light" }}>
           <PathProvider>
-            <div className="relative h-screen w-screen">
-              {children}
-            </div>
+            <div className="relative h-screen w-screen">{children}</div>
           </PathProvider>
         </Providers>
+        <ToastContainer position={"bottom-right"} />
       </body>
     </html>
   );
