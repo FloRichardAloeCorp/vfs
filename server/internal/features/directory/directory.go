@@ -17,7 +17,7 @@ func NewDirectoryFeatures(connectorType string, connector any) (DirectoryFeature
 	var directoryRepo iDirectoryRepository
 	switch connectorType {
 	case "vfs":
-		db, castable := connector.(*vfs.VFS)
+		db, castable := connector.(vfs.VFS)
 		if !castable {
 			return nil, fmt.Errorf("can't cast connector to vfs")
 		}

@@ -19,10 +19,10 @@ type iDirectoryRepository interface {
 }
 
 type directoryRepository struct {
-	vfs *vfs.VFS
+	vfs vfs.VFS
 }
 
-func NewDirectoryRepository(vfs *vfs.VFS) iDirectoryRepository {
+func NewDirectoryRepository(vfs vfs.VFS) iDirectoryRepository {
 	return &directoryRepository{
 		vfs: vfs,
 	}
@@ -35,7 +35,7 @@ func (r *directoryRepository) Create(path string) error {
 }
 
 func (r *directoryRepository) ListFiles(path string) ([]file.FileInfo, error) {
-	nodes, err := r.vfs.ListFiles(path)
+	nodes, err := r.vfs.ListChilren(path)
 	if err != nil {
 		return nil, fmt.Errorf("can't list files in directory: %w", err)
 	}
@@ -56,7 +56,7 @@ func (r *directoryRepository) ListFiles(path string) ([]file.FileInfo, error) {
 }
 
 func (r *directoryRepository) Delete(path string) error {
-	err := r.vfs.DeleteDirectory(path)
+	err := r.vfs.DeleteFile(path)
 	if err != nil {
 		return fmt.Errorf("can't delete directory: %w", err)
 	}

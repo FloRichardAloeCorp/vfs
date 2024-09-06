@@ -17,7 +17,7 @@ func NewFileFeatures(connectorType string, connector any) (FileFeatures, error) 
 	var fileRepo iFileRepository
 	switch connectorType {
 	case "vfs":
-		db, castable := connector.(*vfs.VFS)
+		db, castable := connector.(vfs.VFS)
 		if !castable {
 			return nil, fmt.Errorf("can't cast connector to vfs")
 		}

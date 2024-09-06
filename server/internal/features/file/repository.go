@@ -18,10 +18,10 @@ type iFileRepository interface {
 }
 
 type fileRepository struct {
-	vfs *vfs.VFS
+	vfs vfs.VFS
 }
 
-func NewFileRepository(vfs *vfs.VFS) iFileRepository {
+func NewFileRepository(vfs vfs.VFS) iFileRepository {
 	return &fileRepository{
 		vfs: vfs,
 	}
@@ -35,7 +35,7 @@ func (r *fileRepository) CreateFile(path string, content []byte) error {
 }
 
 func (r *fileRepository) ReadFile(path string) ([]byte, error) {
-	content, err := r.vfs.ReadFile(path)
+	content, err := r.vfs.ReadFileContent(path)
 	if err != nil {
 		return nil, fmt.Errorf("can't read file content: %w", err)
 	}

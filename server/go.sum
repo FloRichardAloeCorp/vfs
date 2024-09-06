@@ -2,14 +2,10 @@ github.com/Aloe-Corporation/cors v1.0.2 h1:wAFT4a0haxp6a40GTogPk61dIvNrJ2UAN8nEK
 github.com/Aloe-Corporation/cors v1.0.2/go.mod h1:xTkm5a4OM4l/N+jI8aUxOqjsM9eKrsjq4AZ+3sxO/II=
 github.com/Aloe-Corporation/logs v0.0.1 h1:YZUH6Foj9SJUsFyVbH6mi/xZmOmp8tJcyJzhIlfFAds=
 github.com/Aloe-Corporation/logs v0.0.1/go.mod h1:9YnQCUwyfoZqaI+Tj85hISnrPXLikXmBAPdZ5I0viNA=
-github.com/FloRichardAloeCorp/vfs/vfs v0.0.0-20240903115854-db1f29ca8894 h1:V0Dyppf6uZCa6po4/epOrxWhiGZkx7GRn4aikcp4kxw=
-github.com/FloRichardAloeCorp/vfs/vfs v0.0.0-20240903115854-db1f29ca8894/go.mod h1:xXdIT88jL20IHLyMcs2hkApYayVlVFb6j4qlWOXmLqc=
-github.com/FloRichardAloeCorp/vfs/vfs v0.0.0-20240905074835-b99c6e2223c9 h1:xvT3uuOaceP2D6gqOcPPvhYOgDXFQb69O/qQZc+ooS4=
-github.com/FloRichardAloeCorp/vfs/vfs v0.0.0-20240905074835-b99c6e2223c9/go.mod h1:xXdIT88jL20IHLyMcs2hkApYayVlVFb6j4qlWOXmLqc=
-github.com/FloRichardAloeCorp/vfs/vfs v0.0.0-20240905085600-563cf951b15f h1:vkwJb3ROvhAddm9tXWPjG/8fWMADBf51JPKAhKLKAgk=
-github.com/FloRichardAloeCorp/vfs/vfs v0.0.0-20240905085600-563cf951b15f/go.mod h1:xXdIT88jL20IHLyMcs2hkApYayVlVFb6j4qlWOXmLqc=
 github.com/FloRichardAloeCorp/vfs/vfs v0.0.0-20240905122649-064cd9c756da h1:4ilz1bmtupjVA6fzi1wp2jYEhvgTYeUmHCTVVOqPASI=
 github.com/FloRichardAloeCorp/vfs/vfs v0.0.0-20240905122649-064cd9c756da/go.mod h1:xXdIT88jL20IHLyMcs2hkApYayVlVFb6j4qlWOXmLqc=
+github.com/FloRichardAloeCorp/vfs/vfs v0.0.0-20240905125306-0a457cafd733 h1:EM/+aChQ7xybo39zeCYwZpF3m3uXFgLkqNmMsKYV5vI=
+github.com/FloRichardAloeCorp/vfs/vfs v0.0.0-20240905125306-0a457cafd733/go.mod h1:xXdIT88jL20IHLyMcs2hkApYayVlVFb6j4qlWOXmLqc=
 github.com/bytedance/sonic v1.12.1 h1:jWl5Qz1fy7X1ioY74WqO0KjAMtAGQs4sYnjiEBiyX24=
 github.com/bytedance/sonic v1.12.1/go.mod h1:B8Gt/XvtZ3Fqj+iSKMypzymZxw/FVwgIGKzMzT9r/rk=
 github.com/bytedance/sonic/loader v0.1.1/go.mod h1:ncP89zfokxS5LZrJxl5z0UJcsk4M4yY2JpfqGeCtNLU=
