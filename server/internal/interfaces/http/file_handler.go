@@ -24,6 +24,7 @@ func (h *FileHandler) RegisterRoutes(router *gin.Engine) {
 	router.DELETE("/file/*path", h.Delete)
 	router.GET("/file/info/*path", h.GetInfo)
 	router.GET("/file/content/*path", h.Get)
+	router.PUT("/file/name/*path", h.UpdateName)
 }
 
 func (h *FileHandler) Post(c *gin.Context) {
@@ -107,4 +108,13 @@ func (h *FileHandler) Delete(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusNoContent, "File deleted")
+}
+
+func (h *FileHandler) UpdateName(c *gin.Context) {
+	path := c.Param("path")
+	if path == "" {
+		log.Error("FileHandler.UpdateName fail", zap.String("error", "empty path"))
+		c.JSON(http.StatusBadRequest, "Bad Request: empty path")
+		return
+	}
 }

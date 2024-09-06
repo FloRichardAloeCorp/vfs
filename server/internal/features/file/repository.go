@@ -60,6 +60,14 @@ func (r *fileRepository) ReadInfo(path string) (*FileInfo, error) {
 	return info, nil
 }
 
+func (r *fileRepository) UpdateName(path string, newName string) {
+	err := r.vfs(path)
+	if err != nil {
+		return fmt.Errorf("can't delete file: %w", err)
+	}
+	return nil
+}
+
 func (r *fileRepository) DeleteFile(path string) error {
 	err := r.vfs.DeleteFile(path)
 	if err != nil {

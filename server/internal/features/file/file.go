@@ -10,6 +10,7 @@ type FileFeatures interface {
 	Create(path string, content []byte) error
 	Read(path string) ([]byte, error)
 	ReadInfo(path string) (*FileInfo, error)
+	UpdateName(path string, newName string) error
 	Delete(path string) error
 }
 

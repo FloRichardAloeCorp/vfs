@@ -17,6 +17,8 @@ type VFS interface {
 	ReadFileInfo(path string) (*node.Node, error)
 	ListChilren(path string) ([]node.Node, error)
 
+	RenameFile(path string, newName string) error
+
 	DeleteFile(path string) error
 }
 

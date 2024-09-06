@@ -39,6 +39,10 @@ func (c *fileController) ReadInfo(path string) (*FileInfo, error) {
 	return info, nil
 }
 
+func (c *fileController) UpdateName(path string, newName string) error {
+	return nil
+}
+
 func (c *fileController) Delete(path string) error {
 	if err := c.fileRepository.DeleteFile(path); err != nil {
 		return fmt.Errorf("can't delete file: %w", err)
