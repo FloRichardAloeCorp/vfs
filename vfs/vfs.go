@@ -87,6 +87,24 @@ func (vfs *vfs) ListChilren(path string) ([]node.Node, error) {
 	return nodes, nil
 }
 
+func (vfs *vfs) RenameFile(path string, newName string) error {
+	if newName == "" {
+		return ErrEmptyName
+	}
+
+	file, err := vfs.engine.FindNode(path)
+	if err != nil {
+		return err
+	}
+	file.Name = newName
+
+	if err := vfs.engine.AddNode(filepath.Dir(path), file); err != nil {
+		return err
+	}
+
+	return vfs.engine.DeleteNode(path)
+}
+
 func (vfs *vfs) DeleteFile(path string) error {
 	return vfs.engine.DeleteNode(path)
 }

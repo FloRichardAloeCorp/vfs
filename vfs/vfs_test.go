@@ -2,6 +2,7 @@ package vfs
 
 import (
 	"path/filepath"
+	"strings"
 	"testing"
 	"time"
 
@@ -304,6 +305,51 @@ func TestVfsDeleteFile(t *testing.T) {
 				assert.Error(t, err)
 			} else {
 				assert.NoError(t, err)
+			}
+		})
+	}
+}
+
+func TestVfsRenameFile(t *testing.T) {
+	type testData struct {
+		name       string
+		shouldFail bool
+		path       string
+		newName    string
+	}
+
+	var testCases = [...]testData{
+		{
+			name:       "Success case",
+			shouldFail: false,
+			path:       "/dir1/file1.txt",
+			newName:    "modified.txt",
+		},
+		{
+			name:       "Fail case: empty new name",
+			shouldFail: true,
+			path:       "/dir1/file1.txt",
+			newName:    "",
+		},
+		{
+			name:       "Fail case: invalid path",
+			shouldFail: true,
+			path:       "/invalid",
+			newName:    "modified.txt",
+		},
+	}
+
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+			instance := newTestVFS()
+			err := instance.RenameFile(testCase.path, testCase.newName)
+			if testCase.shouldFail {
+				assert.Error(t, err)
+			} else {
+				assert.NoError(t, err)
+				updatedFile, err := instance.engine.FindNode(strings.Replace(testCase.path, filepath.Base(testCase.path), testCase.newName, 1))
+				assert.NoError(t, err)
+				assert.Equal(t, testCase.newName, updatedFile.Name)
 			}
 		})
 	}

@@ -10,7 +10,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func newTestVFS() *Engine {
+func newTestEngine() *Engine {
 	createdAt := time.Date(0, 0, 0, 0, 0, 0, 0, time.Local)
 	return &Engine{
 		Node: &node.Node{
@@ -83,7 +83,7 @@ func TestVfsFindNode(t *testing.T) {
 		expectedNode *node.Node
 	}
 
-	instance := newTestVFS()
+	instance := newTestEngine()
 
 	var testCases = [...]testData{
 		{
@@ -191,7 +191,7 @@ func TestVfsAddNode(t *testing.T) {
 
 	for _, testCase := range testCases {
 		t.Run(testCase.name, func(t *testing.T) {
-			instance := newTestVFS()
+			instance := newTestEngine()
 			err := instance.AddNode(testCase.parentPath, testCase.child)
 			if testCase.shouldFail {
 				assert.Error(t, err)
@@ -200,7 +200,7 @@ func TestVfsAddNode(t *testing.T) {
 				expected, err := instance.FindNode(filepath.Join(testCase.parentPath, testCase.child.Name))
 				assert.NoError(t, err)
 				assert.Equal(t, testCase.child, expected)
-				assert.NotEqual(t, instance.Node.LastUpdate, newTestVFS().Node.LastUpdate)
+				assert.NotEqual(t, instance.Node.LastUpdate, newTestEngine().Node.LastUpdate)
 			}
 		})
 	}
@@ -258,7 +258,7 @@ func TestVfsDeleteNode(t *testing.T) {
 
 	for _, testCase := range testCases {
 		t.Run(testCase.name, func(t *testing.T) {
-			instance := newTestVFS()
+			instance := newTestEngine()
 			err := instance.DeleteNode(testCase.path)
 			if testCase.shouldFail {
 				assert.Error(t, err)
@@ -277,14 +277,14 @@ func TestVfsUpdateAllSuccessCases(t *testing.T) {
 		node.CreatedAt = time.Date(0, 0, 0, 0, 0, 0, 0, time.Local)
 	}
 
-	instance := newTestVFS()
+	instance := newTestEngine()
 	err := instance.UpdateAll("/dir1/file1.txt", updateFn)
 	assert.NoError(t, err)
 	assert.Equal(t, time.Date(0, 0, 0, 0, 0, 0, 0, time.Local), instance.Node.CreatedAt)
 	assert.Equal(t, time.Date(0, 0, 0, 0, 0, 0, 0, time.Local), instance.Node.Children["dir1"].CreatedAt)
 	assert.Equal(t, time.Date(0, 0, 0, 0, 0, 0, 0, time.Local), instance.Node.Children["dir1"].Children["file1.txt"].CreatedAt)
 
-	instance = newTestVFS()
+	instance = newTestEngine()
 	err = instance.UpdateAll("/", updateFn)
 	assert.NoError(t, err)
 	assert.Equal(t, time.Date(0, 0, 0, 0, 0, 0, 0, time.Local), instance.Node.CreatedAt)
@@ -316,9 +316,52 @@ func TestVfsUpdateAllFailCases(t *testing.T) {
 
 	for _, testCase := range testCases {
 		t.Run(testCase.name, func(t *testing.T) {
-			instance := newTestVFS()
+			instance := newTestEngine()
 			err := instance.UpdateAll(testCase.path, testCase.updateFn)
 			assert.Error(t, err)
+		})
+	}
+}
+
+func TestEngineUpdateOne(t *testing.T) {
+	type testData struct {
+		name       string
+		path       string
+		shouldFail bool
+		updateFn   func(node *node.Node)
+	}
+
+	var testCases = [...]testData{
+		{
+			name:       "Success case",
+			shouldFail: false,
+			path:       "/dir1/file1.txt",
+			updateFn: func(node *node.Node) {
+				node.Name = "modified.txt"
+			},
+		},
+		{
+			name:       "Fail case: invalid path",
+			shouldFail: true,
+			path:       "/invalid",
+			updateFn: func(node *node.Node) {
+				node.Name = "modified.txt"
+			},
+		},
+	}
+
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+			instance := newTestEngine()
+			err := instance.UpdateOne(testCase.path, testCase.updateFn)
+			if testCase.shouldFail {
+				assert.Error(t, err)
+			} else {
+				assert.NoError(t, err)
+				updatedNode, err := instance.FindNode(testCase.path)
+				assert.NoError(t, err)
+				assert.Equal(t, "modified.txt", updatedNode.Name)
+			}
 		})
 	}
 }
