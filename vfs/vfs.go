@@ -11,11 +11,28 @@ import (
 var _ VFS = (*vfs)(nil)
 
 type VFS interface {
+	// CreateFile create a new file at the target location.
+	//
+	// The parent should be directory.
 	CreateFile(path string, content []byte) error
+
+	// CreateDirectory create a new directory at the target location.
+	//
+	// The parent should be directory.
 	CreateDirectory(path string) error
 
+	// ReadFileContent return the content of the file.
+	//
+	// The function can't read the content of a directory.
+	// It returns the content as a slice bytes, wich is the whole file.
 	ReadFileContent(path string) ([]byte, error)
+
+	// ReadFileInfo returns the node corresponding to the target path.
 	ReadFileInfo(path string) (*node.Node, error)
+
+	// ListChilren returns all the children of the node.
+	//
+	// The path should point to a directory.
 	ListChilren(path string) ([]node.Node, error)
 
 	RenameFile(path string, newName string) error
