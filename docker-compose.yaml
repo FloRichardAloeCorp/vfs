@@ -1,0 +1,21 @@
+version: '3'
+services:
+  vfs_server:
+    container_name: vfs_server
+    image: ghcr.io/florichardaloecorp/vfsserver:latest
+    volumes:
+      - ./vfsconfig/config.yaml:/config/config.yaml:ro
+    environment:
+      VFS_CONFIG: /config/
+    expose:
+      - 8080
+    ports:
+      - 8080:8080
+
+  vfs_client:
+    container_name: vfs_client
+    image: ghcr.io/florichardaloecorp/vfsclient:latest
+    depends_on:
+      - vfs_server
+    ports:
+      - 3000:3000

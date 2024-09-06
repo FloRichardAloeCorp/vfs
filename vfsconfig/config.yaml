@@ -1,0 +1,7 @@
+datasources:
+
+router:
+  addr: ""
+  port: 8080
+  gin_mode: debug
+  shutdown_timeout: 5
