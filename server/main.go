@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	PREFIX_ENV          = "API"
+	PREFIX_ENV          = "VFS"
 	ENV_CONFIG          = PREFIX_ENV + "_CONFIG"
 	DEFAULT_PATH_CONFIG = "./config/"
 )
