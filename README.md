@@ -20,15 +20,15 @@ The project is composed of three parts: the `vfs` module, the `server`, and the 
 
 ### VFS
 
-The `vfs` module is the database engine. It’s a tree of nodes representing the directories and files of the filesystem. It provides convenient functions to manipulate files. Learn more [here](./vfs/README.md.)
+The `vfs` module is the database engine. It’s a tree of nodes representing the directories and files of the filesystem. It provides convenient functions to manipulate files. Learn more [here](./vfs/README.md)
 
 ### Server
 
-The server is a Go REST API developed with `gin`. I built it following the principles of `screaming architecture`. The server allows manipulation of the VFS via HTTP. Learn more [here](./server/README.md.)
+The server is a Go REST API developed with `gin`. I built it following the principles of `screaming architecture`. The server allows manipulation of the VFS via HTTP. Learn more [here](./server/README.md)
 
 ### Client
 
-The client is developed with `Next.js`. There’s nothing particularly unique about it—it simply allows browsing and manipulating your files. [here](./server/README.md.)
+The client is developed with `Next.js`. There’s nothing particularly unique about it—it simply allows browsing and manipulating your files. [here](./server/README.md)
 
 ### Features
 
